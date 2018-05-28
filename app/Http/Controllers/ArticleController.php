@@ -42,37 +42,40 @@ class ArticleController extends Controller
             MTResponse::jsonResponse("error", RESPONSE_ERROR);
         }
 
-        if (isset($_FILES["articleImage"]) && !empty($_FILES["articleImage"])) {
-            // upload and save images of article
-            $uploader = new AkUploader($_FILES["articleImage"]);
+        if (!empty($_FILES)) {
+            foreach ($_FILES as $fileData) {
+                // upload and save images of article
+                $uploader = new AkUploader($fileData);
 
-            $rootPath = $_SERVER['DOCUMENT_ROOT'];
-            $savePathProject = "/upload/" . date("Ymd") . "/";
-            $savePath = $rootPath . $savePathProject;
-            $uploader->setSavePath($savePath);
+                $rootPath = $_SERVER['DOCUMENT_ROOT'];
+                $savePathProject = "/upload/" . date("Ymd") . "/";
+                $savePath = $rootPath . $savePathProject;
+                $uploader->setSavePath($savePath);
 
-            $uploader->uploadAll();
+                $uploader->uploadAll();
 
-            $errorInfo = $uploader->getError();
+                $errorInfo = $uploader->getError();
 
-            if ($errorInfo) {
-                MTResponse::jsonResponse("部分图片上传失败，请检查！", RESPONSE_ERROR);
+                if ($errorInfo) {
+                    MTResponse::jsonResponse("部分图片上传失败，请检查！", RESPONSE_ERROR);
+                }
+
+                // save the images to the article
+                $imageInfo = $uploader->getResult();
+                $articleImageData = [
+                    "article_id"    => $ret_insert,
+                    "url"           => ""
+                ];
+
+                $imageObj = new ArticleImage();
+
+                foreach ($imageInfo['save_name'] as $image) {
+                    $articleImageData['url'] = $savePathProject . $image;
+
+                    $imageObj->createOne($articleImageData);
+                }
             }
 
-            // save the images to the article
-            $imageInfo = $uploader->getResult();
-            $articleImageData = [
-                "article_id"    => $ret_insert,
-                "url"           => ""
-            ];
-
-            $imageObj = new ArticleImage();
-
-            foreach ($imageInfo['save_name'] as $image) {
-                $articleImageData['url'] = $savePathProject . $image;
-
-                $imageObj->createOne($articleImageData);
-            }
         }
 
         MTResponse::jsonResponse("ok", RESPONSE_SUCCESS);

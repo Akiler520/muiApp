@@ -44,7 +44,7 @@ class Article extends Base
                 $article['image'] = [];
 
                 foreach ($userList as $user) {
-                    if ($user['id'] = $article['user_id']) {
+                    if ($user['id'] == $article['user_id']) {
                         $article['username'] = $user['username'];
                         break;
                     }
