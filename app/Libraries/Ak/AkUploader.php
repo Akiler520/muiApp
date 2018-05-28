@@ -306,7 +306,7 @@ class AkUploader {
 		if (!isset($path) || $path == NULL) {
 			return false;
 		}
-		if (!is_dir($path) && !@mkdir($path, '0777', $this->_dirMakeRecursive)) {
+		if (!is_dir($path) && !@mkdir($path, '0755', $this->_dirMakeRecursive)) {
 			die("{error:'mkdir error.', msg:''}");			
 		}
 		
@@ -459,7 +459,7 @@ class AkUploader {
 				$this->_UpResultInfo['save_name'][$key] = "error";
                                 
 			} else {
-				$ret = @move_uploaded_file($this->_FileBar["tmp_name"][$key], $this->_FileSavePath . $new_name);
+				$ret = move_uploaded_file($this->_FileBar["tmp_name"][$key], $this->_FileSavePath . $new_name);
                                 
                 if($fileId != 0){
                     //if file exists 
