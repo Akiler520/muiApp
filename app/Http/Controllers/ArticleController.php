@@ -21,8 +21,9 @@ class ArticleController extends Controller
     }
 
     public function getList(Request $request){
+        $params = $request->all();
         $deployEnvObj = new  Article();
-        $list = $deployEnvObj->getList();
+        $list = $deployEnvObj->getList($params);
 
         MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, $list);
     }

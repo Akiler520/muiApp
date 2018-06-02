@@ -18,9 +18,10 @@ class UserController extends Controller
         parent::__construct();
     }
 
-    public function getList(){
+    public function getList(Request $request){
+        $params = $request->all();
         $deployEnvObj = new  User();
-        $list = $deployEnvObj->getList();
+        $list = $deployEnvObj->getList($params);
 
         MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, $list);
     }

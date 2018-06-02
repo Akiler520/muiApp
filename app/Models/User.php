@@ -16,16 +16,19 @@ class User extends Base
 
     /**
      * get list of env
-     *
+     * @param $params
      * @return mixed
      */
     public function getList($params = []){
+        $page       = $params['page'] ?? 1;
+        $pageSize   = $params['page_size'] ?? 10;
+
         $query = self::select("*");
 //        isset($params['project_id']) && $query = $query->where("project_id", $params['project_id']);
 
         $query->where("is_super", "<>", 1);
 
-        $list = $query->orderBy("id", "DESC")->paginate(10);
+        $list = $query->orderBy("id", "DESC")->paginate($pageSize, null, null, $page);
 
         return $list;
     }
