@@ -21,10 +21,14 @@ class Article extends Base
      * @return mixed
      */
     public function getList($params = []){
-        $query = self::select("*");
+        $page       = $params['page'] ?? 1;
+        $pageSize   = $params['page_size'] ?? 10;
+
+        $query      = self::select("*");
+
         isset($params['user_id']) && $query = $query->where("user_id", $params['user_id']);
 
-        $list = $query->orderBy("id", "DESC")->paginate(10);
+        $list       = $query->orderBy("id", "DESC")->paginate($pageSize, null, null, $page);
 
         // get images of each article
         if ($list) {
