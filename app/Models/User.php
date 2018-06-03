@@ -46,7 +46,7 @@ class User extends Base
      * @return bool
      */
     public function createOne($data){
-        if (!isset($data["username"])) {
+        if (!isset($data["username"]) || empty($data['username'])) {
             return false;
         }
 
