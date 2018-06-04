@@ -68,7 +68,7 @@ class ArticleImage extends Base
 
         if ($images->delete()){
             // delete image files
-            $urls = $images->get(['url']);
+            $urls = $images->get(['url'])->toArray();
 
             $urls = array_column($urls, "url");
 
