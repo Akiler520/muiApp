@@ -105,7 +105,14 @@ class Article extends Base
             throw new \Exception("文章不存在，请检测!");
         }
 
-        return $element->delete();
+        $deleteArticle = $element->delete();
+
+        if ($deleteArticle) {
+            // delete images of article
+            $ret = ArticleImage::deleteByArticle($envID);
+        }
+
+        return $deleteArticle;
     }
 
     /**

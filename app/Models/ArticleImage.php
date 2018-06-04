@@ -9,6 +9,8 @@
 namespace App\Models;
 
 
+use App\Libraries\Ak\AkFileSystemFile;
+
 class ArticleImage extends Base
 {
     protected $table = "post_article_image";
@@ -59,5 +61,25 @@ class ArticleImage extends Base
         }
 
         return $element->delete();
+    }
+
+    public static function deleteByArticle($articleID){
+        $images = self::query()->where("article_id", $articleID);
+
+        if ($images->delete()){
+            // delete image files
+            $urls = $images->get(['url']);
+
+            $urls = array_column($urls, "url");
+
+            $rootPath = $_SERVER['DOCUMENT_ROOT'];
+
+            foreach ($urls as $url) {
+                $imageFile = $rootPath . $url;
+                if (file_exists($imageFile)) {
+                    AkFileSystemFile::delete($imageFile);
+                }
+            }
+        }
     }
 }

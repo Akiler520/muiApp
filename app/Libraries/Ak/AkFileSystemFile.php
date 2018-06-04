@@ -9,6 +9,7 @@
  *
  *	@since 2013-01-11
  */
+namespace App\Libraries\Ak;
 
 class AkFileSystemFile
 {
