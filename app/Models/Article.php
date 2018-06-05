@@ -105,6 +105,11 @@ class Article extends Base
             throw new \Exception("文章不存在，请检测!");
         }
 
+        $userInfo = $_SERVER["userInfo"];
+        if ($userInfo->is_super != 1 && $userInfo->id != $element->id) {
+            throw new \Exception("无权限操作!");
+        }
+
         $deleteArticle = $element->delete();
 
         if ($deleteArticle) {
