@@ -127,7 +127,13 @@ class User extends Base
 
         $this->updateOne($element->id, $token);
 
-        return $tokenString;
+        $result = [
+            "token"     => $tokenString,
+            "is_super"  => $element->is_super,
+            "user_id"   => $element->id,
+        ];
+
+        return $result;
     }
 
     public function loginCheck($token) {

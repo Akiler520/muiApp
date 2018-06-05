@@ -81,7 +81,7 @@ class UserController extends Controller
         $loginToken = $deployEnvObj->login($username, $password);
 
         if ($loginToken) {
-            MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, ["token" => $loginToken]);
+            MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, $loginToken);
         } else {
             MTResponse::jsonResponse("error", RESPONSE_ERROR);
         }
