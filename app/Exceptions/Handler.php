@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
                 $file       = $exception->getFile();
                 $line       = $exception->getLine();
 
-                MTResponse::jsonResponse($message, $code);
+                MTResponse::jsonResponse("[{$line}]" . $message ." -> ". $file, $code);
 
                 break;
         }

@@ -95,6 +95,10 @@ class User extends Base
         }
 
         foreach ($data as $key => $value) {
+            if (!is_numeric($value) && $value == null) {
+                continue;
+            }
+
             $element->$key = $value;
         }
 
@@ -132,6 +136,10 @@ class User extends Base
             "is_super"  => $element->is_super,
             "user_id"   => $element->id,
         ];
+
+        $_SERVER['userInfo'] = $element;
+
+        Log::saveLog("/user/login", "用户登录: " . $element->username);
 
         return $result;
     }

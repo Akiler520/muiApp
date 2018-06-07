@@ -106,7 +106,7 @@ class Article extends Base
         }
 
         $userInfo = $_SERVER["userInfo"];
-        if ($userInfo->is_super != 1 && $userInfo->id != $element->id) {
+        if ($userInfo->is_super != 1 && $userInfo->id != $element->user_id) {
             throw new \Exception("无权限操作!");
         }
 
@@ -139,6 +139,10 @@ class Article extends Base
         }
 
         return $element->save();
+    }
+
+    public function share($ID){
+        return self::query()->find($ID)->increment("shared_count");
     }
 
 }

@@ -113,4 +113,16 @@ class ArticleController extends Controller
         }
     }
 
+    public function share(Request $request, $id){
+        $obj = new Article();
+
+        $ret = $obj->share($id);
+
+        if ($ret) {
+            MTResponse::jsonResponse("ok", RESPONSE_SUCCESS);
+        } else {
+            MTResponse::jsonResponse("error", RESPONSE_ERROR);
+        }
+    }
+
 }

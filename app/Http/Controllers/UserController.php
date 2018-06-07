@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lib\MTResponse;
+use App\Libraries\Ak\AkUploader;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,10 @@ class UserController extends Controller
     }
 
     public function getList(Request $request){
+        if ($this->_loginInfo->is_super != 1) {
+            MTResponse::jsonResponse("您没有操作权限，请联系管理员", RESPONSE_ERROR);
+        }
+
         $params = $request->all();
         $deployEnvObj = new  User();
         $list = $deployEnvObj->getList($params);
@@ -27,14 +32,21 @@ class UserController extends Controller
     }
 
     public function create(Request $request){
+        if ($this->_loginInfo->is_super != 1) {
+            MTResponse::jsonResponse("您没有操作权限，请联系管理员", RESPONSE_ERROR);
+        }
+
         $username = $request->input("username");
         $password = $request->input("password");
 
         $insertData = [
             "username"        => $username,
-            "password"         => md5($password),
+            "nickname"        => $username,
+            "password"        => md5($password),
         ];
+
         $deployEnvObj = new  User();
+
         $ret_insert = $deployEnvObj->createOne($insertData);
 
         if ($ret_insert) {
@@ -44,14 +56,45 @@ class UserController extends Controller
         }
     }
 
-
     public function update(Request $request, $id){
-        $password = $request->input("password");
+        if ($this->_loginInfo->id != $id && $this->_loginInfo->is_super != 1) {
+            MTResponse::jsonResponse("您没有操作权限，请联系管理员", RESPONSE_ERROR);
+        }
+
+        $password = $request->input("password", null);
+        $nickname = $request->input("nickname", null);
 
         $insertData = [
-            "password"         => md5($password),
+            "password"  => $password ? md5($password) : null,
+            "nickname"  => $nickname
         ];
+
+        if (!empty($_FILES)) {
+            foreach ($_FILES as $fileData) {
+                // upload and save images of article
+                $uploader = new AkUploader($fileData);
+
+                $rootPath = $_SERVER['DOCUMENT_ROOT'];
+                $savePathProject = "/upload/" . date("Ymd") . "/";
+                $savePath = $rootPath . $savePathProject;
+                $uploader->setSavePath($savePath);
+
+                $uploader->uploadAll();
+
+                $errorInfo = $uploader->getError();
+
+                if ($errorInfo) {
+                    MTResponse::jsonResponse("部分图片上传失败，请检查！", RESPONSE_ERROR);
+                }
+
+                $imageInfo = $uploader->getResult();
+                $insertData['header_img'] = $savePathProject . $imageInfo['save_name'][0];
+
+            }
+        }
+
         $deployEnvObj = new  User();
+
         $ret_insert = $deployEnvObj->updateOne($id, $insertData);
 
         if ($ret_insert) {
@@ -62,6 +105,9 @@ class UserController extends Controller
     }
 
     public function delete(Request $request, $env_id){
+        if ($this->_loginInfo->is_super != 1) {
+            MTResponse::jsonResponse("您没有操作权限，请联系管理员", RESPONSE_ERROR);
+        }
 
         $deployEnvObj = new  User();
         $ret_insert = $deployEnvObj->deleteOne($env_id);

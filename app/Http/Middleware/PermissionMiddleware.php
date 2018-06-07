@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Log;
 use App\Models\User;
 use Closure;
 use PPC\TeamServiceSDK\UcenterService;
@@ -42,6 +43,11 @@ class PermissionMiddleware
 
         // save global user info
         $_SERVER['userInfo'] = $userInfo;
+
+        $uri = $request->getRequestUri();
+        $requestData = json_encode($request->all());
+
+        Log::saveLog($uri, $requestData);
 
         return $next($request);
     }

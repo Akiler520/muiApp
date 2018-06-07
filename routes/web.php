@@ -37,6 +37,7 @@ $router->group(['middleware'=>'permission'], function () use ($router){
         $router->post('create',         'ArticleController@create');
         $router->post('update/{id}',    'ArticleController@update');
         $router->post('delete/{id}',    'ArticleController@delete');
+        $router->post('share/{id}',     'ArticleController@share');
     });
 
     $router->group(['prefix' => 'articleImage'], function () use ($router){
