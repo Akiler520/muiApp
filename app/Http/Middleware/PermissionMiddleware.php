@@ -5,12 +5,6 @@ namespace App\Http\Middleware;
 use App\Models\Log;
 use App\Models\User;
 use Closure;
-use PPC\TeamServiceSDK\UcenterService;
-use \Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Redis;
-use App\Model\Employee;
-use PPC\TeamServiceSDK\Utils\PPCResponse;
-
 use App\Lib\MTResponse;
 
 class PermissionMiddleware
@@ -47,7 +41,7 @@ class PermissionMiddleware
         $uri = $request->getRequestUri();
         $requestData = json_encode($request->all());
 
-        Log::saveLog($uri, $requestData);
+        (stripos($uri, "list") === false) && Log::saveLog($uri, $requestData);
 
         return $next($request);
     }

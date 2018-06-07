@@ -142,7 +142,12 @@ class Article extends Base
     }
 
     public function share($ID){
-        return self::query()->find($ID)->increment("shared_count");
+        $element = self::query()->find($ID);
+        if (!$element) {
+            throw new \Exception("文章不存在，请检测!");
+        }
+
+        return $element->increment("shared_count");
     }
 
 }
