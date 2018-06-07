@@ -80,6 +80,7 @@ class Article extends Base
 
         $userInfo = $_SERVER["userInfo"];
         $data['user_id'] = $userInfo->id;
+        $data['shared_count'] = mt_rand(1, 10);;
 
         $insert = new self();
 
@@ -147,7 +148,9 @@ class Article extends Base
             throw new \Exception("文章不存在，请检测!");
         }
 
-        return $element->increment("shared_count");
+        $amount = mt_rand(1, 10);
+
+        return $element->increment("shared_count", $amount);
     }
 
 }
