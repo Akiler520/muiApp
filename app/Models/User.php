@@ -135,6 +135,8 @@ class User extends Base
             "token"     => $tokenString,
             "is_super"  => $element->is_super,
             "user_id"   => $element->id,
+            "username"  => $element->username,
+            "nickname"  => $element->nickname,
         ];
 
         $_SERVER['userInfo'] = $element;
