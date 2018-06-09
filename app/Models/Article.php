@@ -50,7 +50,7 @@ class Article extends Base
                 foreach ($userList as $user) {
                     if ($user['id'] == $article['user_id']) {
                         $article['username'] = $user['username'];
-                        $article['header_img'] = env("APP_URL") . $user['header_img'];
+                        $article['header_img'] = is_file($_SERVER['DOCUMENT_ROOT']. $user['header_img']) ? env("APP_URL") . $user['header_img'] : "images/logo.png";
                         break;
                     }
                 }
