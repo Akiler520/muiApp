@@ -17,7 +17,7 @@ class Article extends Base
 
     /**
      * get list of env
-     *
+     * @param $params
      * @return mixed
      */
     public function getList($params = []){
@@ -50,6 +50,7 @@ class Article extends Base
                 foreach ($userList as $user) {
                     if ($user['id'] == $article['user_id']) {
                         $article['username'] = $user['username'];
+                        $article['header_img'] = $user['header_img'];
                         break;
                     }
                 }
