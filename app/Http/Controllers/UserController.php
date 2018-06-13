@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Lib\MTResponse;
 use App\Libraries\Ak\AkUploader;
+use App\Models\Article;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -134,7 +135,24 @@ class UserController extends Controller
     }
 
     public function message(Request $request){
-        MTResponse::jsonResponse("ok", RESPONSE_SUCCESS);
+        $messaged_at = $this->_loginInfo->messaged_at;
+        if (!$messaged_at) {
+            $messaged_at = time() - 3600;
+        }
+
+        $newArticle = Article::getNewArticle($messaged_at);
+
+        if ($newArticle) {
+            // update messaged_at of user
+            $userObj = new User();
+            $userObj->updateOne($this->_loginInfo->id, ["messaged_at" => strtotime($newArticle->created_at)]);
+
+            MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, $newArticle);
+        }else{
+            MTResponse::jsonResponse("null", RESPONSE_ERROR);
+        }
+
+
     }
 
 }

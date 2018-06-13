@@ -156,4 +156,9 @@ class Article extends Base
         return $element->increment("shared_count", $amount);
     }
 
+    public static function getNewArticle($time){
+        $info = self::query()->where("created_at", ">", $time)->orderBy("created_at", "desc")->first();
+
+        return $info;
+    }
 }
