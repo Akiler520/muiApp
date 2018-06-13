@@ -45,11 +45,13 @@ class Article extends Base
 
             foreach ($list['data'] as &$article) {
                 $article['username'] = "";
+                $article['nickname'] = "";
                 $article['image'] = [];
 
                 foreach ($userList as $user) {
                     if ($user['id'] == $article['user_id']) {
                         $article['username'] = $user['username'];
+                        $article['nickname'] = $user['nickname'];
                         $article['header_img'] = is_file($_SERVER['DOCUMENT_ROOT']. $user['header_img']) ? env("APP_URL") . $user['header_img'] : "images/logo.png";
                         break;
                     }
