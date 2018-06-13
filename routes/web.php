@@ -30,6 +30,7 @@ $router->group(['middleware'=>'permission'], function () use ($router){
         $router->post('create',         'UserController@create');
         $router->post('update/{id}',    'UserController@update');
         $router->post('delete/{id}',    'UserController@delete');
+        $router->post('message',        'UserController@message');
     });
 
     $router->group(['prefix' => 'article'], function () use ($router){

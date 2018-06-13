@@ -133,4 +133,8 @@ class UserController extends Controller
         }
     }
 
+    public function message(Request $request){
+        MTResponse::jsonResponse("ok", RESPONSE_SUCCESS);
+    }
+
 }
