@@ -113,7 +113,8 @@ class ArticleController extends Controller
         }
     }
 
-    public function share(Request $request, $id){
+    public function share(Request $request){
+        $id = $request->input("id");
         $obj = new Article();
 
         $ret = $obj->share($id);

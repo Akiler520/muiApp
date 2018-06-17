@@ -43,10 +43,27 @@ class Article extends Base
             $userObj = new User();
             $userList = $userObj->getListByID($userIDs);
 
+            $loginUserID = 0;
+            $isSuper = 0;
+
+            if (isset($_SERVER['userInfo'])) {
+                $loginUserID = $_SERVER['userInfo']->id;
+                if ($_SERVER['userInfo']->is_super == 1) {
+                    $isSuper = 1;
+                }
+            }
+            $loginInfo = $_SERVER['userInfo'] ?? [];
+            $loginUserID = empty($loginInfo) ? 0 : $loginInfo->id;
+
             foreach ($list['data'] as &$article) {
                 $article['username'] = "";
                 $article['nickname'] = "";
+                $article['can_delete'] = 0;
                 $article['image'] = [];
+
+                if ($article['user_id'] == $loginUserID || $isSuper) {
+                    $article['can_delete'] = 1;
+                }
 
                 foreach ($userList as $user) {
                     if ($user['id'] == $article['user_id']) {

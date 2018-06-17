@@ -15,17 +15,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'user'], function () use ($router){
-    $router->post('login', 'UserController@login');
-});
-
-$router->group(['prefix' => 'article'], function () use ($router){
-    $router->post('list',           'ArticleController@getList');
-});
 
 $router->group(['middleware'=>'permission'], function () use ($router){
-
     $router->group(['prefix' => 'user'], function () use ($router){
+        $router->post('login', 'UserController@login');
+
         $router->post('list',           'UserController@getList');
         $router->post('create',         'UserController@create');
         $router->post('update/{id}',    'UserController@update');
@@ -34,11 +28,11 @@ $router->group(['middleware'=>'permission'], function () use ($router){
     });
 
     $router->group(['prefix' => 'article'], function () use ($router){
-//        $router->post('list',           'ArticleController@getList');
+        $router->post('list',           'ArticleController@getList');
         $router->post('create',         'ArticleController@create');
         $router->post('update/{id}',    'ArticleController@update');
         $router->post('delete/{id}',    'ArticleController@delete');
-        $router->post('share/{id}',     'ArticleController@share');
+        $router->post('share',     'ArticleController@share');
     });
 
     $router->group(['prefix' => 'articleImage'], function () use ($router){

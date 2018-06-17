@@ -9,6 +9,11 @@ use App\Lib\MTResponse;
 
 class PermissionMiddleware
 {
+    private $_whiteList = [
+        '/user/login',
+        '/article/list',
+        '/article/share'
+    ];
     /**
      * Handle an incoming request.
      *
@@ -19,29 +24,34 @@ class PermissionMiddleware
      */
     public function handle($request, Closure $next)
     {
-
+        $uri = $request->getRequestUri();
         // check token
         $token = $request->input("token");
+        $userInfo = null;
 
-        if (!$token) {
-            MTResponse::jsonResponse("对不起，您没有登录", RESPONSE_NO_LOGIN);
+        if ($token) {
+            $userObj = new  User();
+
+            $userInfo = $userObj->loginCheck($token);
         }
 
-        $userObj = new  User();
+        if (!in_array($uri, $this->_whiteList)) {
+            if (!$token) {
+                MTResponse::jsonResponse("对不起，您没有登录", RESPONSE_NO_LOGIN);
+            }
 
-        $userInfo = $userObj->loginCheck($token);
+            if (!$userInfo) {
+                MTResponse::jsonResponse("对不起，您没有登录", RESPONSE_NO_LOGIN);
+            }
 
-        if (!$userInfo) {
-            MTResponse::jsonResponse("对不起，您没有登录", RESPONSE_NO_LOGIN);
         }
 
         // save global user info
         $_SERVER['userInfo'] = $userInfo;
 
-        $uri = $request->getRequestUri();
         $requestData = json_encode($request->all());
 
-        (stripos($uri, "list") === false) && Log::saveLog($uri, $requestData);
+        !in_array($uri, $this->_whiteList) && Log::saveLog($uri, $requestData);
 
         return $next($request);
     }
