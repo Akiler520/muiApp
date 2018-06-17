@@ -20,7 +20,7 @@ $router->group(['prefix' => 'user'], function () use ($router){
 });
 
 $router->group(['prefix' => 'article'], function () use ($router){
-//    $router->post('list',           'ArticleController@getList');
+    $router->post('list',           'ArticleController@getList');
 });
 
 $router->group(['middleware'=>'permission'], function () use ($router){
@@ -34,7 +34,7 @@ $router->group(['middleware'=>'permission'], function () use ($router){
     });
 
     $router->group(['prefix' => 'article'], function () use ($router){
-        $router->post('list',           'ArticleController@getList');
+//        $router->post('list',           'ArticleController@getList');
         $router->post('create',         'ArticleController@create');
         $router->post('update/{id}',    'ArticleController@update');
         $router->post('delete/{id}',    'ArticleController@delete');
