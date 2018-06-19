@@ -31,10 +31,12 @@ class ArticleController extends Controller
     public function create(Request $request){
         $title      = $request->input("title");
         $content    = $request->input("content");
+        $remark     = $request->input("remark");
 
         $insertData = [
             "title"         => $title,
             "content"       => $content,
+            "remark"        => $remark,
         ];
 
         $deployEnvObj   = new  Article();
