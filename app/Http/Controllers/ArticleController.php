@@ -36,7 +36,7 @@ class ArticleController extends Controller
         $insertData = [
             "title"         => $title,
             "content"       => $content,
-            "remark"        => mb_strcut($remark, 0, 30),
+            "remark"        => mb_substr($remark, 0, 30),
         ];
 
         $deployEnvObj   = new  Article();
