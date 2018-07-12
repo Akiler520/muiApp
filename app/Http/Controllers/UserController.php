@@ -70,6 +70,8 @@ class UserController extends Controller
             "nickname"  => $nickname
         ];
 
+        $resultData = [];
+
         if (!empty($_FILES)) {
             foreach ($_FILES as $fileData) {
                 // upload and save images of article
@@ -91,6 +93,7 @@ class UserController extends Controller
                 $imageInfo = $uploader->getResult();
                 $insertData['header_img'] = $savePathProject . $imageInfo['save_name'][0];
 
+                $resultData["header"] = env("APP_URL") . $insertData['header_img'];
             }
         }
 
@@ -99,7 +102,7 @@ class UserController extends Controller
         $ret_insert = $deployEnvObj->updateOne($id, $insertData);
 
         if ($ret_insert) {
-            MTResponse::jsonResponse("ok", RESPONSE_SUCCESS);
+            MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, $resultData);
         } else {
             MTResponse::jsonResponse("error", RESPONSE_ERROR);
         }

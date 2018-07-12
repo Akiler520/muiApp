@@ -69,7 +69,9 @@ class Article extends Base
                     if ($user['id'] == $article['user_id']) {
                         $article['username'] = $user['username'];
                         $article['nickname'] = $user['nickname'];
-                        $article['header_img'] = is_file($_SERVER['DOCUMENT_ROOT']. $user['header_img']) ? env("APP_URL") . $user['header_img'] : "images/logo.png";
+                        $headerCusmtom = $_SERVER['DOCUMENT_ROOT']. $user['header_img'];
+                        $headerDefault = $_SERVER['DOCUMENT_ROOT']. "/images/header.png";
+                        $article['header_img'] = is_file($headerCusmtom) ? env("APP_URL") . $user['header_img'] : ((is_file($headerDefault)) ?  env("APP_URL") . "/images/header.png" : "images/logo.png");
                         break;
                     }
                 }

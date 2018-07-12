@@ -137,6 +137,7 @@ class User extends Base
             "user_id"   => $element->id,
             "username"  => $element->username,
             "nickname"  => $element->nickname,
+            "header"    => env("APP_URL") . $element->header_img,
         ];
 
         $_SERVER['userInfo'] = $element;
