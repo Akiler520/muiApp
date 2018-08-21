@@ -158,4 +158,14 @@ class UserController extends Controller
 
     }
 
+    public function getUserInfo(Request $request){
+        $userInfo = $_SERVER['userInfo'];
+
+        if ($userInfo) {
+            MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, $userInfo);
+        }else{
+            MTResponse::jsonResponse("null", RESPONSE_ERROR);
+        }
+    }
+
 }

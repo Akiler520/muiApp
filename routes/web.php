@@ -24,6 +24,7 @@ $router->group(['middleware'=>'permission'], function () use ($router){
         $router->post('create',         'UserController@create');
         $router->post('update/{id}',    'UserController@update');
         $router->post('delete/{id}',    'UserController@delete');
+        $router->post('getUserInfo',    'UserController@getUserInfo');
         $router->post('message',        'UserController@message');
     });
 
