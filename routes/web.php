@@ -26,6 +26,7 @@ $router->group(['middleware'=>'permission'], function () use ($router){
         $router->post('delete/{id}',    'UserController@delete');
         $router->post('getUserInfo',    'UserController@getUserInfo');
         $router->post('message',        'UserController@message');
+        $router->post('client',         'UserController@client');
     });
 
     $router->group(['prefix' => 'article'], function () use ($router){

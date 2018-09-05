@@ -11,6 +11,7 @@ class PermissionMiddleware
 {
     private $_whiteList = [
         '/user/login',
+        '/user/client',
         '/article/list',
         '/article/share'
     ];

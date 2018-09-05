@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Business\MessageBusiness;
 use App\Lib\MTResponse;
 use App\Libraries\Ak\AkUploader;
 use App\Models\Article;
@@ -163,6 +164,29 @@ class UserController extends Controller
 
         if ($userInfo) {
             MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, $userInfo);
+        }else{
+            MTResponse::jsonResponse("null", RESPONSE_ERROR);
+        }
+    }
+
+    /**
+     * 处理客户端信息
+     * @param \Illuminate\Http\Request $request
+     */
+    public function client(Request $request){
+        $params = $request->all();
+
+        $param['client_id'] = $params['client_id'];
+        $param['client_token'] = $params['client_token'];
+        $param['appid'] = $params['appid'];
+        $param['appkey'] = $params['appkey'];
+
+        $param['user_id'] = !empty($this->_loginInfo) ? $this->_loginInfo->id : 0;
+
+        $ret = MessageBusiness::checkClient($param);
+
+        if ($ret) {
+            MTResponse::jsonResponse("ok", RESPONSE_SUCCESS);
         }else{
             MTResponse::jsonResponse("null", RESPONSE_ERROR);
         }
