@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Business\MessageBusiness;
 use App\Lib\MTResponse;
 use App\Libraries\Ak\AkUploader;
+use App\Models\App;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -139,7 +140,15 @@ class UserController extends Controller
     }
 
     public function message(Request $request){
-        $messaged_at = $this->_loginInfo->messaged_at;
+        $appID = $request->input("appid");
+
+        $appInfo = App::getByAppID($appID);
+
+        if (!$appID || !$appInfo) {
+            MTResponse::jsonResponse("null", RESPONSE_ERROR);
+        }
+
+        $messaged_at = $appInfo->messaged_at;
         if (!$messaged_at) {
             $messaged_at = time() - 3600;
         }
@@ -147,13 +156,12 @@ class UserController extends Controller
         $newArticle = Article::getNewArticle($messaged_at);
 
         if ($newArticle) {
-            // update messaged_at of user
-            $userObj = new User();
-            $userObj->updateOne($this->_loginInfo->id, ["messaged_at" => strtotime($newArticle->created_at)]);
+            // update messaged_at of app
+            App::updateByAppID($appID, ["messaged_at" => strtotime($newArticle->created_at)]);
 
             MTResponse::jsonResponse("ok", RESPONSE_SUCCESS, $newArticle);
         }else{
-            MTResponse::jsonResponse("null", RESPONSE_ERROR);
+            MTResponse::jsonResponse("null", RESPONSE_NO_FOUND);
         }
 
 

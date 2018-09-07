@@ -13,7 +13,8 @@ class PermissionMiddleware
         '/user/login',
         '/user/client',
         '/article/list',
-        '/article/share'
+        '/article/share',
+        '/user/message',
     ];
     /**
      * Handle an incoming request.
